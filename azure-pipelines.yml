@@ -47,7 +47,7 @@ steps:
   path: SymCrypt-OpenSSL
 - script: |
     git clone -b debian/openssl-1.1.1k-1 https://salsa.debian.org/debian/openssl.git openssl
-    cd openssl-debian
+    cd openssl
     dpkg-buildpackage -b -rfakeroot -us -uc
   workingDirectory: $(Pipeline.Workspace)
   displayName: 'Build OpenSSL'
