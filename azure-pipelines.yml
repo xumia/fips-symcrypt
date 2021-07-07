@@ -9,7 +9,10 @@ trigger:
 pool:
   vmImage: ubuntu-20.04
 
-container: debian:buster
+container:
+  image: debian:buster
+  options:  "--name ci-container -v /usr/bin/docker:/tmp/docker:ro"
+
 
 resources:
  repositories:
@@ -26,6 +29,10 @@ resources:
 
 steps:
 - script: |
+    /tmp/docker exec -t -u 0 ci-container \
+    sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
+  displayName: 'Install Sudo in container'
+- script: |
     whoami
     groups
     sudo apt-get update
@@ -33,7 +40,6 @@ steps:
     echo 'deb http://deb.debian.org/debian buster-backports main' | sudo tee /etc/apt/sources.list.d/buster-backports.list
     sudo apt-get update
     sudo apt-get -t buster-backports install cmake
-  runAsRoot: true
   displayName: 'Install packages'
 - checkout: SymCrypt
   path: SymCrypt
