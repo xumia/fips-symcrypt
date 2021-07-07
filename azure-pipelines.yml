@@ -58,6 +58,7 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
   displayName: 'Install OpenSSL'
 - script: |
+    sudo pip3 install -r scripts/requirements.txt
     mkdir bin
     cd bin
     cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
