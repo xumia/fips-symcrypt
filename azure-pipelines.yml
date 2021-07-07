@@ -60,8 +60,8 @@ steps:
     sudo pip3 install -r scripts/requirements.txt
     mkdir bin
     cd bin
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
-    make _rdseed64_step=__builtin_ia32_rdseed_di_step
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake -DCMAKE_C_FLAGS="-D_rdseed64_step=__builtin_ia32_rdseed_di_step"
+    cmake --build .
   workingDirectory: $(Pipeline.Workspace)/SymCrypt
   displayName: 'Build SymCrypt'
 - script: |
