@@ -11,8 +11,22 @@ pool:
 
 container: debian:buster
 
+resources:
+ repositories:
+   - repository: SymCrypt
+     type: github
+     name: microsoft/SymCrypt
+     ref: refs/heads/master
+   - repository: SymCrypt-OpenSSL
+     type: github
+     name: microsoft/SymCrypt-OpenSSL
+     ref: refs/heads/main
+
 steps:
 - script: |
-    apt-get update
-    apt-get install cmake git make build-essential quilt debhelper bc python3 python3-pip sudo libssl-dev libgcc-8-dev -y
+    sudo apt-get update
+    sudo apt-get install cmake git make build-essential quilt debhelper bc python3 python3-pip sudo libssl-dev libgcc-8-dev -y
+    echo 'deb http://deb.debian.org/debian buster-backports main' | sudo tee /etc/apt/sources.list.d/buster-backports.list
+    sudo apt-get update
+    sudo apt-get -t buster-backports install cmake
   displayName: 'Install packages'
