@@ -45,3 +45,28 @@ steps:
   path: SymCrypt
 - checkout: SymCrypt-OpenSSL
   path: SymCrypt-OpenSSL
+- script: |
+    mkdir bin
+    cd bin
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
+    make _rdseed64_step=__builtin_ia32_rdseed_di_step
+  workingDirectory: $(Pipeline.Workspace)/SymCrypt
+  displayName: 'Build SymCrypt'
+- script: |
+    git clone -b debian/openssl-1.1.1k-1 https://salsa.debian.org/debian/openssl.git openssl-debian
+    cd openssl-debian
+    dpkg-buildpackage -b -rfakeroot -us -uc
+  workingDirectory: $(Pipeline.Workspace)
+  displayName: 'Build OpenSSL'
+- script: |
+    sudo dpkg -i libssl1.1_*.deb
+    sudo dpkg -i libssl-dev_*.deb
+    sudo dpkg -i openssl_*.deb
+  workingDirectory: $(Pipeline.Workspace)
+  displayName: 'Install OpenSSL'
+- script: |
+    cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
+    cmake .
+    make
+  workingDirectory: $(Pipeline.Workspace)/SymCrypt-OpenSSL
+  displayName: 'Build SymCrypt-OpenSSL'
