@@ -63,6 +63,8 @@ steps:
   workingDirectory: $(Pipeline.Workspace)/SymCrypt
   displayName: 'Build SymCrypt'
 - script: |
+    sudo mkdir -p $HOME
+    sudo chown $USER $HOME
     ln -s $(Pipeline.Workspace)/SymCrypt ~/SymCrypt
     cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
     cmake .
