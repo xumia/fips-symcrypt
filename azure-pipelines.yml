@@ -46,7 +46,7 @@ steps:
 - checkout: SymCrypt-OpenSSL
   path: SymCrypt-OpenSSL
 - script: |
-    git clone -b debian/openssl-1.1.1k-1 https://salsa.debian.org/debian/openssl.git openssl-debian
+    git clone -b debian/openssl-1.1.1k-1 https://salsa.debian.org/debian/openssl.git openssl
     cd openssl-debian
     dpkg-buildpackage -b -rfakeroot -us -uc
   workingDirectory: $(Pipeline.Workspace)
@@ -71,3 +71,12 @@ steps:
     make
   workingDirectory: $(Pipeline.Workspace)/SymCrypt-OpenSSL
   displayName: 'Build SymCrypt-OpenSSL'
+- script: |
+    cp $(Pipeline.Workspace)/*.deb ./
+    cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
+    cp $(Pipeline.Workspace)/SymCrypt-OpenSSL/SymCryptEngine/dynamic/libsymcryptengine.so ./
+  workingDirectory: $(Pipeline.Workspace)/target
+  displayName: 'Copy packages'
+- publish: $(Pipeline.Workspace)/target
+  artifact: ${{ parameters.artifact_name }}
+  displayName: "Archive packages"
