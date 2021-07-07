@@ -1,0 +1,18 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-20.04
+
+container: Debian:buster
+
+steps:
+- script: |
+    apt-get update
+    apt-get install cmake git make build-essential quilt debhelper bc python3 python3-pip sudo libssl-dev libgcc-8-dev -y
+  displayName: 'Install packages'
