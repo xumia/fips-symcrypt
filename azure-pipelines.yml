@@ -17,10 +17,12 @@ resources:
      type: github
      name: microsoft/SymCrypt
      ref: refs/heads/master
+     endpoint: build
    - repository: SymCrypt-OpenSSL
      type: github
      name: microsoft/SymCrypt-OpenSSL
      ref: refs/heads/main
+     endpoint: build
 
 steps:
 - script: |
