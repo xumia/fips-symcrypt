@@ -78,5 +78,5 @@ steps:
   workingDirectory: $(Pipeline.Workspace)/target
   displayName: 'Copy packages'
 - publish: $(Pipeline.Workspace)/target
-  artifact: ${{ parameters.artifact_name }}
+  artifact: fips-symcrypt
   displayName: "Archive packages"
