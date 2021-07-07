@@ -9,7 +9,7 @@ trigger:
 pool:
   vmImage: ubuntu-20.04
 
-container: Debian:buster
+container: debian:buster
 
 steps:
 - script: |
