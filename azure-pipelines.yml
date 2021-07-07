@@ -13,7 +13,6 @@ container:
   image: debian:buster
   options:  "--name ci-container -v /usr/bin/docker:/tmp/docker:ro"
 
-
 resources:
  repositories:
    - repository: SymCrypt
