@@ -34,6 +34,7 @@ steps:
 - script: |
     sudo apt-get update
     sudo apt-get install cmake git make build-essential quilt debhelper bc python3 python3-pip sudo libssl-dev libgcc-8-dev -y
+    # Upgrade cmake to 3.16.3-3~bpo10+1
     echo 'deb http://deb.debian.org/debian buster-backports main' | sudo tee /etc/apt/sources.list.d/buster-backports.list
     sudo apt-get update
     sudo apt-get -t buster-backports install cmake -y
