@@ -55,7 +55,6 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
   displayName: 'Install OpenSSL'
 - script: |
-    ln -s $(Pipeline.Workspace)/SymCrypt ~/SymCrypt
     sudo pip3 install -r scripts/requirements.txt
     mkdir bin
     cd bin
@@ -64,6 +63,7 @@ steps:
   workingDirectory: $(Pipeline.Workspace)/SymCrypt
   displayName: 'Build SymCrypt'
 - script: |
+    ln -s $(Pipeline.Workspace)/SymCrypt ~/SymCrypt
     cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
     cmake .
     make
