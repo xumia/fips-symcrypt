@@ -23,7 +23,8 @@ resources:
    - repository: SymCrypt-OpenSSL
      type: github
      name: microsoft/SymCrypt-OpenSSL
-     ref: refs/heads/main
+     #ref: refs/heads/main
+     ref: 4dc557f47ba895ac973c8586a5de92e3dfeef80c
      endpoint: build
 
 steps:
