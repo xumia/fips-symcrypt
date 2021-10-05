@@ -25,7 +25,7 @@ steps:
     mkdir -p $(Pipeline.Workspace)/target
   displayName: 'Install packages'
 - checkout: self
-  submodules: recursive
+  submodules: true
 - script: |
     cd src/SymCrypt
     sudo pip3 install -r scripts/requirements.txt
