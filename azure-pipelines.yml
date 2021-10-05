@@ -55,7 +55,7 @@ steps:
     sudo chown $USER $HOME
     ln -s $(Pipeline.Workspace)/SymCrypt ~/SymCrypt
     cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
-    cmake .
+    cmake -D_X86_
     make
   workingDirectory: $(Pipeline.Workspace)/SymCrypt-OpenSSL
   displayName: 'Build SymCrypt-OpenSSL'
