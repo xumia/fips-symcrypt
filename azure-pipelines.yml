@@ -13,21 +13,6 @@ container:
   image: debian:bullseye
   options:  "--name ci-container -v /usr/bin/docker:/tmp/docker:ro"
 
-resources:
- repositories:
-   - repository: SymCrypt
-     type: github
-     name: microsoft/SymCrypt
-     ref: refs/heads/master
-     endpoint: build
-   - repository: SymCrypt-OpenSSL
-     type: github
-     name: microsoft/SymCrypt-OpenSSL
-     #ref: refs/heads/main
-     #ref: 4dc557f47ba895ac973c8586a5de92e3dfeef80c
-     ref: ee41c6865136282bbf656f8bd247d3fafd5f4684
-     endpoint: build
-
 steps:
 - script: |
     /tmp/docker exec -t -u 0 ci-container \
@@ -39,26 +24,24 @@ steps:
     sudo apt-get install openssl libssl-dev libssl1.1
     mkdir -p $(Pipeline.Workspace)/target
   displayName: 'Install packages'
-- checkout: SymCrypt
-  path: SymCrypt
-- checkout: SymCrypt-OpenSSL
-  path: SymCrypt-OpenSSL
+- checkout: self
+  submodules: recursive
 - script: |
+    cd src/SymCrypt
     sudo pip3 install -r scripts/requirements.txt
     mkdir bin
     cd bin
     cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
     cmake --build .
-  workingDirectory: $(Pipeline.Workspace)/SymCrypt
   displayName: 'Build SymCrypt'
 - script: |
+    cd src/SymCrypt-OpenSSL
     sudo mkdir -p $HOME
     sudo chown $USER $HOME
-    ln -s $(Pipeline.Workspace)/SymCrypt ~/SymCrypt
+    ln -s $(Pipeline.Workspace)/src/SymCrypt ~/SymCrypt
     cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
     cmake .
     make
-  workingDirectory: $(Pipeline.Workspace)/SymCrypt-OpenSSL
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
     cp $(Pipeline.Workspace)/*.deb ./
