@@ -44,9 +44,9 @@ steps:
     make
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
-    cp $(System.DefaultWorkingDirectory)/*.deb ./
-    cp $(System.DefaultWorkingDirectory)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
-    cp $(System.DefaultWorkingDirectory)/SymCrypt-OpenSSL/SymCryptEngine/dynamic/libsymcryptengine.so ./
+    cp $(System.DefaultWorkingDirectory)/src/*.deb ./
+    cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
+    cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/SymCryptEngine/dynamic/libsymcryptengine.so ./
   workingDirectory: $(Pipeline.Workspace)/target
   displayName: 'Copy packages'
 - publish: $(Pipeline.Workspace)/target
