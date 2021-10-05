@@ -1,0 +1,3 @@
+[submodule "src/openssh"]
+	path = src/openssh
+	url = https://salsa.debian.org/ssh-team/openssh

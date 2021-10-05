@@ -1,0 +1,74 @@
+Index: openssh/openbsd-compat/openssl-compat.c
+===================================================================
+--- openssh.orig/openbsd-compat/openssl-compat.c
++++ openssh/openbsd-compat/openssl-compat.c
+@@ -66,6 +66,39 @@ ssh_compatible_openssl(long headerver, l
+ 	return 0;
+ }
+ 
++#if defined(USE_SYMCRYPT_ENGINE)
++void SC_OSSL_ENGINE_set_trace_level(int trace_level);
++void SC_OSSL_ENGINE_set_trace_log_filename(const char *filename);
++int SC_OSSL_ENGINE_Initialize();
++
++void
++ssh_symcrypt_engine_init(void)
++{
++	LogLevel level = log_level_get();
++	int trace_level = 2;
++	switch(level){
++		case SYSLOG_LEVEL_QUIET:
++			trace_level = 0;
++			break;
++		case SYSLOG_LEVEL_FATAL:
++		case SYSLOG_LEVEL_ERROR:
++			trace_level = 1;
++			break;
++		case SYSLOG_LEVEL_INFO:
++			trace_level = 2;
++		case SYSLOG_LEVEL_VERBOSE:
++		case SYSLOG_LEVEL_DEBUG1:
++		case SYSLOG_LEVEL_DEBUG2:
++		case SYSLOG_LEVEL_DEBUG3:
++			trace_level = 3;
++		default:
++			trace_level = 2;
++	}
++	SC_OSSL_ENGINE_set_trace_level(trace_level);
++	SC_OSSL_ENGINE_Initialize();
++}
++#endif
++
+ void
+ ssh_libcrypto_init(void)
+ {
+@@ -78,6 +111,9 @@ ssh_libcrypto_init(void)
+ 	OpenSSL_add_all_algorithms();
+ #endif
+ 
++#ifdef USE_SYMCRYPT_ENGINE
++	ssh_symcrypt_engine_init();
++#else
+ #ifdef	USE_OPENSSL_ENGINE
+ 	/* Enable use of crypto hardware */
+ 	ENGINE_load_builtin_engines();
+@@ -91,6 +127,7 @@ ssh_libcrypto_init(void)
+ 	OPENSSL_config(NULL);
+ # endif
+ #endif /* USE_OPENSSL_ENGINE */
++#endif /* USE_SYMCRYPT_ENGINE */
+ }
+ 
+ #endif /* WITH_OPENSSL */
+Index: openssh/debian/changelog
+===================================================================
+--- openssh.orig/debian/changelog
++++ openssh/debian/changelog
+@@ -1,3 +1,7 @@
++openssh (1:8.0p1-7+fips) unstable; urgency=medium
++
++  * Support symcrypt engine
++
+ openssh (1:8.0p1-7) unstable; urgency=medium
+ 
+   [ Daniel Kahn Gillmor ]
