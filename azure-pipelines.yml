@@ -38,15 +38,15 @@ steps:
     cd src/SymCrypt-OpenSSL
     sudo mkdir -p $HOME
     sudo chown $USER $HOME
-    ln -s $(Pipeline.Workspace)/src/SymCrypt ~/SymCrypt
-    cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
+    ln -s $(System.DefaultWorkingDirectory)/src/SymCrypt ~/SymCrypt
+    cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
     cmake .
     make
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
-    cp $(Pipeline.Workspace)/*.deb ./
-    cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
-    cp $(Pipeline.Workspace)/SymCrypt-OpenSSL/SymCryptEngine/dynamic/libsymcryptengine.so ./
+    cp $(System.DefaultWorkingDirectory)/*.deb ./
+    cp $(System.DefaultWorkingDirectory)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
+    cp $(System.DefaultWorkingDirectory)/SymCrypt-OpenSSL/SymCryptEngine/dynamic/libsymcryptengine.so ./
   workingDirectory: $(Pipeline.Workspace)/target
   displayName: 'Copy packages'
 - publish: $(Pipeline.Workspace)/target
