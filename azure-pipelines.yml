@@ -46,6 +46,17 @@ steps:
     cmake --build .
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
+    cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so /usr/lib/x86_64-linux-gnu/
+    cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so /usr/lib/x86_64-linux-gnu/
+  displayName: 'Install Symcrypt'
+- script: |
+    cd src/openssh
+    export QUILT_PATCHES=../openssh.patch
+    export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
+    quilt push -a
+    LIBS="-lsymcryptengine -lsymcrypt -lcrypto -lssl -ledit" DEB_BUILD_PROFILES="noudeb" DEB_BUILD_OPTIONS="nocheck nostrip"  DEB_CFLAGS_APPEND="-DUSE_SYMCRYPT_ENGINE"  dpkg-buildpackage -b -rfakeroot -us -uc
+  displayName: 'Build Openssl'
+- script: |
     cp $(System.DefaultWorkingDirectory)/src/*.deb ./
     cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
     cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so ./
