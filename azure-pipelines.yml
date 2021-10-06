@@ -23,8 +23,8 @@ resources:
    - repository: SymCrypt-OpenSSL
      type: github
      name: microsoft/SymCrypt-OpenSSL
-     #ref: refs/heads/main
-     ref: 4dc557f47ba895ac973c8586a5de92e3dfeef80c
+     ref: refs/heads/main
+     #ref: 4dc557f47ba895ac973c8586a5de92e3dfeef80c
      endpoint: build
 
 steps:
@@ -55,8 +55,11 @@ steps:
     sudo chown $USER $HOME
     ln -s $(Pipeline.Workspace)/SymCrypt ~/SymCrypt
     cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
-    cmake .
-    make
+    mkdir bin
+    cd bin
+    cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
+    cmake --build .
+    find .
   workingDirectory: $(Pipeline.Workspace)/SymCrypt-OpenSSL
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
