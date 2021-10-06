@@ -46,8 +46,8 @@ steps:
     cmake --build .
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
-    cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so /usr/lib/x86_64-linux-gnu/
-    cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so /usr/lib/x86_64-linux-gnu/
+    sudo cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so /usr/lib/x86_64-linux-gnu/
+    sudo cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so /usr/lib/x86_64-linux-gnu/
   displayName: 'Install Symcrypt'
 - script: |
     cd src/openssh
