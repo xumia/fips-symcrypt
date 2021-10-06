@@ -65,10 +65,10 @@ Index: openssh/debian/changelog
 --- openssh.orig/debian/changelog
 +++ openssh/debian/changelog
 @@ -1,3 +1,7 @@
-+openssh (1:8.0p1-7+fips) unstable; urgency=medium
++openssh (1:8.4p1-5+fips) unstable; urgency=medium
 +
-+  * Support symcrypt engine
++   * Support symcrypt engine
 +
- openssh (1:8.0p1-7) unstable; urgency=medium
+ openssh (1:8.4p1-5) unstable; urgency=high
  
-   [ Daniel Kahn Gillmor ]
+   * CVE-2021-28041: Fix double free in ssh-agent(1) (closes: #984940).
