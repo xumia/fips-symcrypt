@@ -51,6 +51,8 @@ steps:
 - script: |
     sudo cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so /usr/lib/x86_64-linux-gnu/
     sudo cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so /usr/lib/x86_64-linux-gnu/
+    ld --verbose | grep SEARCH_DIR
+    ls /usr/lib/x86_64-linux-gnu/
   displayName: 'Install Symcrypt'
 - script: |
     cd src/openssh
