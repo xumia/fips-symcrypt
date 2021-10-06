@@ -65,7 +65,7 @@ steps:
 - script: |
     cp $(Pipeline.Workspace)/*.deb ./
     cp $(Pipeline.Workspace)/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
-    cp $(Pipeline.Workspace)/SymCrypt-OpenSSL/SymCryptEngine/dynamic/libsymcryptengine.so ./
+    cp $(Pipeline.Workspace)/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so ./
   workingDirectory: $(Pipeline.Workspace)/target
   displayName: 'Copy packages'
 - publish: $(Pipeline.Workspace)/target
