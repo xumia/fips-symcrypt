@@ -43,6 +43,7 @@ steps:
     export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
     quilt push -a
     LIBS="-lsymcryptengine -lsymcrypt -lcrypto -lssl -ledit" DEB_BUILD_PROFILES="noudeb" DEB_BUILD_OPTIONS="nocheck nostrip"  DEB_CFLAGS_APPEND="-DUSE_SYMCRYPT_ENGINE"  dpkg-buildpackage -b -rfakeroot -us -uc
+    cp ../*.deb $(System.DefaultWorkingDirectory)/target/
   displayName: 'Build Openssh'
 - publish: $(System.DefaultWorkingDirectory)/target
   artifact: fips-symcrypt
