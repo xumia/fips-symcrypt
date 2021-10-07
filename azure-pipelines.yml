@@ -35,16 +35,7 @@ steps:
     sudo mkdir -p $HOME
     sudo pip3 install -r src/SymCrypt/scripts/requirements.txt
     make all
-  displayName: 'Build SymCrypt-OpenSSL'
-- script: |
-    sudo dpkg -i target/symcrypt-openssl_0.1_amd64.deb
-    cd src/openssh
-    export QUILT_PATCHES=../openssh.patch
-    export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
-    quilt push -a
-    LIBS="-lsymcryptengine -lsymcrypt -lcrypto -lssl -ledit" DEB_BUILD_PROFILES="noudeb" DEB_BUILD_OPTIONS="nocheck nostrip"  DEB_CFLAGS_APPEND="-DUSE_SYMCRYPT_ENGINE"  dpkg-buildpackage -b -rfakeroot -us -uc
-    cp ../*.deb $(System.DefaultWorkingDirectory)/target/
-  displayName: 'Build Openssh'
+  displayName: 'Build'
 - publish: $(System.DefaultWorkingDirectory)/target
   artifact: fips-symcrypt
   displayName: "Archive packages"
