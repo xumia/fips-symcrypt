@@ -37,7 +37,7 @@ steps:
     make all
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
-    sudo dpkg -i symcrypt-openssl_0.1_amd64.deb
+    sudo dpkg -i target/symcrypt-openssl_0.1_amd64.deb
     cd src/openssh
     export QUILT_PATCHES=../openssh.patch
     export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
