@@ -2,7 +2,7 @@ Index: openssh/openbsd-compat/openssl-compat.c
 ===================================================================
 --- openssh.orig/openbsd-compat/openssl-compat.c
 +++ openssh/openbsd-compat/openssl-compat.c
-@@ -66,6 +66,39 @@ ssh_compatible_openssl(long headerver, l
+@@ -66,6 +66,41 @@ ssh_compatible_openssl(long headerver, l
  	return 0;
  }
  
@@ -26,10 +26,12 @@ Index: openssh/openbsd-compat/openssl-compat.c
 +			break;
 +		case SYSLOG_LEVEL_INFO:
 +			trace_level = 2;
++			break;
 +		case SYSLOG_LEVEL_VERBOSE:
 +		case SYSLOG_LEVEL_DEBUG1:
 +		case SYSLOG_LEVEL_DEBUG2:
 +		case SYSLOG_LEVEL_DEBUG3:
++			SC_OSSL_ENGINE_set_trace_log_filename("/var/log/symcrypt.log");
 +			trace_level = 3;
 +		default:
 +			trace_level = 2;
@@ -42,7 +44,7 @@ Index: openssh/openbsd-compat/openssl-compat.c
  void
  ssh_libcrypto_init(void)
  {
-@@ -78,6 +111,9 @@ ssh_libcrypto_init(void)
+@@ -78,6 +113,9 @@ ssh_libcrypto_init(void)
  	OpenSSL_add_all_algorithms();
  #endif
  
@@ -52,7 +54,7 @@ Index: openssh/openbsd-compat/openssl-compat.c
  #ifdef	USE_OPENSSL_ENGINE
  	/* Enable use of crypto hardware */
  	ENGINE_load_builtin_engines();
-@@ -91,6 +127,7 @@ ssh_libcrypto_init(void)
+@@ -91,6 +129,7 @@ ssh_libcrypto_init(void)
  	OPENSSL_config(NULL);
  # endif
  #endif /* USE_OPENSSL_ENGINE */
