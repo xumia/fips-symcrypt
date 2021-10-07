@@ -30,42 +30,16 @@ steps:
 - checkout: self
   submodules: true
 - script: |
-    cd src/SymCrypt
-    sudo pip3 install -r scripts/requirements.txt
-    mkdir bin
-    cd bin
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
-    cmake --build .
-  displayName: 'Build SymCrypt'
-- script: |
-    cd src/SymCrypt-OpenSSL
-    sudo mkdir -p $HOME
-    sudo chown $USER $HOME
-    ln -s $(System.DefaultWorkingDirectory)/src/SymCrypt ~/SymCrypt
-    cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
-    mkdir bin
-    cd bin
-    cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
-    cmake --build .
+    make all
   displayName: 'Build SymCrypt-OpenSSL'
 - script: |
-    sudo cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so /usr/lib/x86_64-linux-gnu/
-    sudo cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so /usr/lib/x86_64-linux-gnu/
-    sudo chmod a+r /usr/lib/x86_64-linux-gnu/libsymcrypt*
-  displayName: 'Install Symcrypt'
-- script: |
+    sudo dpkg -i symcrypt-openssl_0.1_amd64.deb
     cd src/openssh
     export QUILT_PATCHES=../openssh.patch
     export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
     quilt push -a
     LIBS="-lsymcryptengine -lsymcrypt -lcrypto -lssl -ledit" DEB_BUILD_PROFILES="noudeb" DEB_BUILD_OPTIONS="nocheck nostrip"  DEB_CFLAGS_APPEND="-DUSE_SYMCRYPT_ENGINE"  dpkg-buildpackage -b -rfakeroot -us -uc
   displayName: 'Build Openssh'
-- script: |
-    cp $(System.DefaultWorkingDirectory)/src/*.deb ./
-    cp $(System.DefaultWorkingDirectory)/src/SymCrypt/bin/module/AMD64/LinuxUserMode/libsymcrypt.so ./
-    cp $(System.DefaultWorkingDirectory)/src/SymCrypt-OpenSSL/bin/SymCryptEngine/dynamic/libsymcryptengine.so ./
-  workingDirectory: $(Pipeline.Workspace)/target
-  displayName: 'Copy packages'
-- publish: $(Pipeline.Workspace)/target
+- publish: $(System.DefaultWorkingDirectory)/target
   artifact: fips-symcrypt
   displayName: "Archive packages"

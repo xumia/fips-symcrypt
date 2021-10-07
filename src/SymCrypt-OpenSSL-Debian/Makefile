@@ -34,11 +34,13 @@ $(LIBSYMCRYPT):
 
 $(LIBSYMCRYPTENGINE): $(LIBSYMCRYPT)
 	cd ../SymCrypt-OpenSSL
+	cp $(LIBSYMCRYPT) ./
 	ln -sf $(ROOT_PATH)/src/SymCrypt ~/SymCrypt
 	mkdir -p bin
 	cd bin
 	cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
 	cmake --build .
+	rm ../libsymcrypt.so
 	cp SymCryptEngine/dynamic/libsymcryptengine.so $(LIBSYMCRYPTENGINE)
 
 $(TARGET): $(DEPENDS)
