@@ -2,59 +2,18 @@ Index: openssh/openbsd-compat/openssl-compat.c
 ===================================================================
 --- openssh.orig/openbsd-compat/openssl-compat.c
 +++ openssh/openbsd-compat/openssl-compat.c
-@@ -66,6 +66,41 @@ ssh_compatible_openssl(long headerver, l
- 	return 0;
- }
- 
-+#if defined(USE_SYMCRYPT_ENGINE)
-+void SC_OSSL_ENGINE_set_trace_level(int trace_level);
-+void SC_OSSL_ENGINE_set_trace_log_filename(const char *filename);
-+int SC_OSSL_ENGINE_Initialize();
-+
-+void
-+ssh_symcrypt_engine_init(void)
-+{
-+	LogLevel level = log_level_get();
-+	int trace_level = 2;
-+	switch(level){
-+		case SYSLOG_LEVEL_QUIET:
-+			trace_level = 0;
-+			break;
-+		case SYSLOG_LEVEL_FATAL:
-+		case SYSLOG_LEVEL_ERROR:
-+			trace_level = 1;
-+			break;
-+		case SYSLOG_LEVEL_INFO:
-+			trace_level = 2;
-+			break;
-+		case SYSLOG_LEVEL_VERBOSE:
-+		case SYSLOG_LEVEL_DEBUG1:
-+		case SYSLOG_LEVEL_DEBUG2:
-+		case SYSLOG_LEVEL_DEBUG3:
-+			SC_OSSL_ENGINE_set_trace_log_filename("/var/log/symcrypt.log");
-+			trace_level = 3;
-+		default:
-+			trace_level = 2;
-+	}
-+	SC_OSSL_ENGINE_set_trace_level(trace_level);
-+	SC_OSSL_ENGINE_Initialize();
-+}
-+#endif
-+
- void
- ssh_libcrypto_init(void)
- {
-@@ -78,6 +113,9 @@ ssh_libcrypto_init(void)
+@@ -78,6 +78,10 @@ ssh_libcrypto_init(void)
  	OpenSSL_add_all_algorithms();
  #endif
  
 +#ifdef USE_SYMCRYPT_ENGINE
-+	ssh_symcrypt_engine_init();
++	int SC_OSSL_ENGINE_Initialize();
++	SC_OSSL_ENGINE_Initialize();
 +#else
  #ifdef	USE_OPENSSL_ENGINE
  	/* Enable use of crypto hardware */
  	ENGINE_load_builtin_engines();
-@@ -91,6 +129,7 @@ ssh_libcrypto_init(void)
+@@ -91,6 +95,7 @@ ssh_libcrypto_init(void)
  	OPENSSL_config(NULL);
  # endif
  #endif /* USE_OPENSSL_ENGINE */
@@ -74,3 +33,57 @@ Index: openssh/debian/changelog
  openssh (1:8.4p1-5) unstable; urgency=high
  
    * CVE-2021-28041: Fix double free in ssh-agent(1) (closes: #984940).
+Index: openssh/log.c
+===================================================================
+--- openssh.orig/log.c
++++ openssh/log.c
+@@ -250,6 +250,38 @@ debug3(const char *fmt,...)
+ 	va_end(args);
+ }
+ 
++#if defined(USE_SYMCRYPT_ENGINE)
++void SC_OSSL_ENGINE_set_trace_level(int trace_level);
++
++void
++symcrypt_engine_log_init(void)
++{
++        LogLevel level = log_level_get();
++        int trace_level = 2;
++        switch(level){
++                case SYSLOG_LEVEL_QUIET:
++                        trace_level = 0;
++                        break;
++                case SYSLOG_LEVEL_FATAL:
++                case SYSLOG_LEVEL_ERROR:
++                        trace_level = 1;
++                        break;
++                case SYSLOG_LEVEL_INFO:
++                        trace_level = 2;
++                        break;
++                case SYSLOG_LEVEL_VERBOSE:
++                case SYSLOG_LEVEL_DEBUG1:
++                case SYSLOG_LEVEL_DEBUG2:
++                case SYSLOG_LEVEL_DEBUG3:
++                        trace_level = 3;
++                        break;
++                default:
++                        trace_level = 2;
++        }
++        SC_OSSL_ENGINE_set_trace_level(trace_level);
++}
++#endif
++
+ /*
+  * Initialize the log.
+  */
+@@ -269,6 +301,10 @@ log_init(char *av0, LogLevel level, Sysl
+ 		exit(1);
+ 	}
+ 
++#if defined(USE_SYMCRYPT_ENGINE)
++	symcrypt_engine_log_init();
++#endif
++
+ 	log_handler = NULL;
+ 	log_handler_ctx = NULL;
+ 
