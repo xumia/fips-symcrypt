@@ -30,7 +30,8 @@ $(OPENSSH): $(SYMCRYPT_OPENSSL)
 
 $(PYTHON):
 	cd src/cpython
-	ln -sf ../python3/debian debian
+	rm -rf debian
+	cp -rf ../python3/debian debian
 	export QUILT_PATCHES=debian/patches
 	export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
 	quilt push -a
