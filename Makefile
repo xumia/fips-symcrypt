@@ -7,8 +7,9 @@ ARCH ?= amd64
 ROOT := $(shell pwd)
 SYMCRYPT_OPENSSL := target/symcrypt-openssl_0.1_amd64.deb
 OPENSSH := target/ssh_8.4p1-5+fips_all.deb
+PYTHON := target/python3.9_3.9.2-1+fips_amd64.deb
 
-DEPNEDS := $(SYMCRYPT_OPENSSL) $(OPENSSH)
+DEPNEDS := $(SYMCRYPT_OPENSSL) $(OPENSSH) $(PYTHON)
 
 all: $(DEPNEDS)
 
@@ -24,5 +25,21 @@ $(OPENSSH): $(SYMCRYPT_OPENSSL)
 	quilt push -a
 	LIBS="-lsymcryptengine -lsymcrypt -lcrypto -lssl -ledit" DEB_BUILD_PROFILES="noudeb" DEB_BUILD_OPTIONS="nocheck nostrip"  DEB_CFLAGS_APPEND="-DUSE_SYMCRYPT_ENGINE"  dpkg-buildpackage -b -rfakeroot -us -uc
 	quilt pop -a
+	cp ../*.deb $(ROOT)/target
+	rm ../*.deb
+
+$(PYTHON):
+	cd src/cpython
+        ln -sf ../python3/debian debian
+	export QUILT_PATCHES=debian/patches
+	export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
+	quilt push -a
+	rm -rf .pc
+	export QUILT_PATCHES=../cpython.patch
+	quilt push -a
+
+	# Fix Misc/NEWS not found issue
+	touch Misc/NEWS
+	dpkg-buildpackage -b -d -rfakeroot -us -uc
 	cp ../*.deb $(ROOT)/target
 	rm ../*.deb

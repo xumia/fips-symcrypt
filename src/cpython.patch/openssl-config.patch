@@ -1,0 +1,32 @@
+Index: cpython/Modules/_ssl.c
+===================================================================
+--- cpython.orig/Modules/_ssl.c
++++ cpython/Modules/_ssl.c
+@@ -6032,13 +6032,7 @@ PyInit__ssl(void)
+         return NULL;
+     PySocketModule = *socket_api;
+ 
+-#ifndef OPENSSL_VERSION_1_1
+-    /* Load all algorithms and initialize cpuid */
+-    OPENSSL_add_all_algorithms_noconf();
+-    /* Init OpenSSL */
+-    SSL_load_error_strings();
+-    SSL_library_init();
+-#endif
++    OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CONFIG, NULL);
+ 
+ #ifdef HAVE_OPENSSL_CRYPTO_LOCK
+     /* note that this will start threading if not already started */
+Index: cpython/debian/changelog
+===================================================================
+--- cpython.orig/debian/changelog
++++ cpython/debian/changelog
+@@ -1,3 +1,8 @@
++python3.9 (3.9.2-1+fips) unstable; urgency=medium
++
++  * Support symcrypt engine
++
++
+ python3.9 (3.9.2-1) unstable; urgency=medium
+ 
+   * Python 3.9.2 release. No changes since 3.9.2~rc1-1.
