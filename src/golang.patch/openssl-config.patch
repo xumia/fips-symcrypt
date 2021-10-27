@@ -7,7 +7,7 @@ Index: go1.15-openssl-fips/src/crypto/internal/boring/goopenssl.h
  DEFINEFUNCINTERNAL(int, OPENSSL_init, (void), ())
  
 +#include <openssl/crypto.h>
-+include "openssl/conf.h"
++#include "openssl/conf.h"
 +
 +DEFINEFUNCINTERNAL(int, OPENSSL_init_crypto, (uint64_t opts, const OPENSSL_INIT_SETTINGS *settings), (opts, settings))
 +
