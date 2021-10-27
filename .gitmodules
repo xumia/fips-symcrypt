@@ -13,3 +13,11 @@
 [submodule "src/cpython"]
 	path = src/cpython
 	url = https://github.com/python/cpython
+[submodule "src/golang"]
+	path = src/golang
+	url = https://pagure.io/go
+	branch = go1.15-openssl-fips
+[submodule "src/golang-debian"]
+	path = src/golang-debian
+	url = https://salsa.debian.org/go-team/compiler/golang.git
+	branch = debian/1.15/bullseye

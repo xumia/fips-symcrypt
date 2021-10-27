@@ -29,6 +29,9 @@ jobs:
       sudo apt-get install -y dh-exec dh-runit libaudit-dev libedit-dev libfido2-dev libgtk-3-dev libkrb5-dev
       sudo apt-get install -y libwrap-dev pkg-config
       sudo apt-get install -y libpam-dev libselinux1-dev libsystemd-dev libwrap0-dev
+
+      # Build Golang
+      sudo apt-get install golang
  
       # Build Python
       sudo apt-get install -y lsb-release sharutils libreadline-dev libncursesw5-dev  libbz2-dev liblzma-dev libgdbm-dev libdb-dev tk-dev blt-dev  libexpat1-dev libmpdec-dev libbluetooth-dev locales-all libsqlite3-dev media-types

@@ -7,9 +7,10 @@ ARCH ?= amd64
 ROOT := $(shell pwd)
 SYMCRYPT_OPENSSL := target/symcrypt-openssl_0.1_amd64.deb
 OPENSSH := target/ssh_8.4p1-5+fips_all.deb
+GOLANG := target/golang-1.15-go_1.15.15-1~deb11u1+fips_amd64.deb
 PYTHON := target/python3.9_3.9.2-1+fips_amd64.deb
 
-DEPNEDS := $(SYMCRYPT_OPENSSL) $(OPENSSH) $(PYTHON)
+DEPNEDS := $(SYMCRYPT_OPENSSL) $(OPENSSH) $(GOLANG) $(PYTHON)
 
 all: $(DEPNEDS)
 
@@ -25,6 +26,17 @@ $(OPENSSH): $(SYMCRYPT_OPENSSL)
 	quilt push -a
 	LIBS="-lsymcryptengine -lsymcrypt -lcrypto -lssl -ledit" DEB_BUILD_PROFILES="noudeb" DEB_BUILD_OPTIONS="nocheck nostrip"  DEB_CFLAGS_APPEND="-DUSE_SYMCRYPT_ENGINE"  dpkg-buildpackage -b -rfakeroot -us -uc
 	quilt pop -a
+	cp ../*.deb $(ROOT)/target
+	rm ../*.deb
+
+$(GOLANG):
+	cd src/golang
+	rm -rf debian
+	cp -rf ../golang-debian/debian debian
+	export QUILT_PATCHES=../golang.patch
+	export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
+	quilt push -a
+	dpkg-buildpackage -b -rfakeroot -us -uc
 	cp ../*.deb $(ROOT)/target
 	rm ../*.deb
 

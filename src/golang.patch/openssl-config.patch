@@ -1,0 +1,32 @@
+Index: go1.15-openssl-fips/src/crypto/internal/boring/goopenssl.h
+===================================================================
+--- go1.15-openssl-fips.orig/src/crypto/internal/boring/goopenssl.h
++++ go1.15-openssl-fips/src/crypto/internal/boring/goopenssl.h
+@@ -68,9 +68,15 @@ _goboringcrypto_DLOPEN_OPENSSL(void)
+ 
+ DEFINEFUNCINTERNAL(int, OPENSSL_init, (void), ())
+ 
++#include <openssl/crypto.h>
++include "openssl/conf.h"
++
++DEFINEFUNCINTERNAL(int, OPENSSL_init_crypto, (uint64_t opts, const OPENSSL_INIT_SETTINGS *settings), (opts, settings))
++
+ static void
+ _goboringcrypto_OPENSSL_setup(void) {
+ 	_goboringcrypto_internal_OPENSSL_init();
++	_goboringcrypto_internal_OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CONFIG, NULL);
+ }
+ 
+ #include <openssl/err.h>
+Index: go1.15-openssl-fips/debian/changelog
+===================================================================
+--- go1.15-openssl-fips.orig/debian/changelog
++++ go1.15-openssl-fips/debian/changelog
+@@ -1,3 +1,7 @@
++golang-1.15 (1.15.15-1~deb11u1+fips) bullseye; urgency=medium
++
++  * Support symcrypt engine
++
+ golang-1.15 (1.15.15-1~deb11u1) bullseye; urgency=medium
+ 
+   [ Anthony Fok ]
