@@ -24,10 +24,14 @@ all: $(TARGET)
 
 $(LIBSYMCRYPT):
 	cd ../SymCrypt
+	export QUILT_PATCHES=../SymCrypt.patch
+	export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
+	quilt push -a
 	mkdir -p bin
 	cd bin
 	cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
 	cmake --build .
+	quilt pop -a
 	mkdir -p $(TARGET_PATH)
 	cp module/AMD64/LinuxUserMode/libsymcrypt.so $(LIBSYMCRYPT)
 

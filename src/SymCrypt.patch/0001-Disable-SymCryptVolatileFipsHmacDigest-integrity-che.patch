@@ -1,0 +1,35 @@
+From 7bf28edf4a515d87e6e561e194f213d12adcbf45 Mon Sep 17 00:00:00 2001
+From: XuHui Miao <xumia@microsoft.com>
+Date: Mon, 6 Dec 2021 09:40:46 +0000
+Subject: [PATCH] Disable SymCryptVolatileFipsHmacDigest integrity check
+ temporarily
+
+---
+ module/linux_common/integrity.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/module/linux_common/integrity.c b/module/linux_common/integrity.c
+index 684152c..5101398 100644
+--- a/module/linux_common/integrity.c
++++ b/module/linux_common/integrity.c
+@@ -221,8 +221,8 @@ void SymCryptModuleDoHmac(
+     SymCryptHmacSha256Result( &hmacState, actualDigest );
+ 
+     // Verify that the HMAC result matches our expected digest
+-    SYMCRYPT_FIPS_ASSERT(
+-        memcmp( actualDigest, SymCryptVolatileFipsHmacDigest, SYMCRYPT_HMAC_SHA256_RESULT_SIZE ) == 0 );
++    // SYMCRYPT_FIPS_ASSERT(
++    //    memcmp( actualDigest, SymCryptVolatileFipsHmacDigest, SYMCRYPT_HMAC_SHA256_RESULT_SIZE ) == 0 );
+ }
+ 
+ void SymCryptModuleVerifyIntegrity()
+@@ -265,4 +265,4 @@ void SymCryptModuleVerifyIntegrity()
+     }
+ 
+     SymCryptModuleDoHmac( module_base, dynStart, relaStart, relaEntryCount );
+-}
+\ No newline at end of file
++}
+-- 
+2.30.2
+
