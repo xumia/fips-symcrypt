@@ -1,9 +1,6 @@
 [submodule "src/openssh"]
 	path = src/openssh
 	url = https://salsa.debian.org/ssh-team/openssh
-[submodule "src/SymCrypt"]
-	path = src/SymCrypt
-	url = https://github.com/microsoft/SymCrypt
 [submodule "src/SymCrypt-OpenSSL"]
 	path = src/SymCrypt-OpenSSL
 	url = https://github.com/microsoft/SymCrypt-OpenSSL
