@@ -42,9 +42,14 @@ jobs:
   - checkout: self
     submodules: true
   - script: |
+      if [ -d src/sonic-fips ]; then
+        COPY_TARGET_ROOT=y
+        cd src/sonic-fips
+      fi
       sudo mkdir -p $HOME
       sudo pip3 install -r src/SymCrypt/scripts/requirements.txt
       make all
+      [ $COPY_TARGET_ROOT == y ] && cp target/* -rf $(System.DefaultWorkingDirectory)/target/
     displayName: 'Build'
   - publish: $(System.DefaultWorkingDirectory)/target
     artifact: fips-symcrypt
