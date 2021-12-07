@@ -29,7 +29,7 @@ $(LIBSYMCRYPT):
 	cmake .. -DCMAKE_TOOLCHAIN_FILE=../cmake-toolchain/LinuxUserMode-AMD64.cmake
 	cmake --build .
 	mkdir -p $(TARGET_PATH)
-	cp module/AMD64/LinuxUserMode/libsymcrypt.so $(LIBSYMCRYPT)
+	cp module/AMD64/LinuxUserMode/generic_linux/libsymcrypt.so $(LIBSYMCRYPT)
 
 $(LIBSYMCRYPTENGINE): $(LIBSYMCRYPT)
 	cd ../SymCrypt-OpenSSL

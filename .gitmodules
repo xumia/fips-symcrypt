@@ -18,3 +18,6 @@
 	path = src/golang-debian
 	url = https://salsa.debian.org/go-team/compiler/golang.git
 	branch = debian/1.15/bullseye
+[submodule "src/SymCrypt"]
+	path = src/SymCrypt
+	url = https://microsoft.visualstudio.com/OS/_git/SymCrypt
