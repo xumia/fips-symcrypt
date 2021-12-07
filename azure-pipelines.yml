@@ -40,7 +40,7 @@ jobs:
       mkdir -p $(Pipeline.Workspace)/target
     displayName: 'Install packages'
   - checkout: self
-    submodules: true
+    submodules: recursive
   - script: |
       if [ -d src/sonic-fips ]; then
         COPY_TARGET_ROOT=y
