@@ -56,5 +56,4 @@ jobs:
     displayName: 'Build'
   - publish: $(System.DefaultWorkingDirectory)/target
     artifact: fips-symcrypt
-    condition: always()
     displayName: "Archive packages"
