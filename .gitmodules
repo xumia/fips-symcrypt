@@ -20,4 +20,4 @@
 	branch = debian/1.15/bullseye
 [submodule "src/SymCrypt"]
 	path = src/SymCrypt
-	url = https://microsoft.visualstudio.com/OS/_git/SymCrypt
+	url = https://github.com/xumia/One-Symcrypt
