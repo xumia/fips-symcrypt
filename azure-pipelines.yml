@@ -40,6 +40,7 @@ jobs:
     displayName: 'Install packages'
   - checkout: self
     submodules: recursive
+    clean: true
   - script: |
       set -ex
       if [ -d src/sonic-fips ]; then
