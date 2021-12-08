@@ -45,8 +45,10 @@ $(LIBSYMCRYPTENGINE): $(LIBSYMCRYPT)
 $(TARGET): $(DEPENDS)
 	mkdir -p $(INSTALL_PATH)
 	mkdir -p $(DEBIAN_DIR)
+	mkdir -p $(BUILD_ROOT_DIR)/usr/lib/ssl
 	cp $(LIBSYMCRYPT) $(INSTALL_PATH)
 	cp $(LIBSYMCRYPTENGINE) $(INSTALL_PATH)
 	chmod o+r $(INSTALL_PATH)/*
-	cp debian/* $(DEBIAN_DIR)/
+	cp -rf debian/* $(DEBIAN_DIR)/
+	cp openssl.cnf $(BUILD_ROOT_DIR)/usr/lib/ssl/openssl-fips.cnf
 	dpkg-deb --build $(BUILD_ROOT_DIR) $(TARGET)
