@@ -48,7 +48,8 @@ jobs:
       fi
       sudo mkdir -p $HOME
       sudo pip3 install -r src/SymCrypt/scripts/requirements.txt
-      make target/symcrypt-openssl_0.1_amd64.deb
+      #make target/symcrypt-openssl_0.1_amd64.deb
+      make all
       cp -rf src/SymCrypt/bin/module/AMD64/LinuxUserMode target/ 
       if [ $COPY_TARGET_ROOT == y ]; then
         cp target/* -rf $(System.DefaultWorkingDirectory)/target/
